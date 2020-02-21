@@ -12,7 +12,7 @@ var passwordCharset = {
   "l": "abcdefghijklmnopqrstuvwxyz",
   "u": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
   "n": "0123456789",
-  "s": "!”#$%&’()*+,-./:;<=>?@[\\]^_`{|}~"
+  "s": "!#$%&()*+-/:;<=>?@[\\]^_{|}~"
 };
 
 // Current / default password length and character types selection 
@@ -35,25 +35,29 @@ function writePassword() {
 // Returns - new password as string
 function generatePassword() {
   var newPassword = "";
-  var selectedCharset = getSelectedPasswordCharset();
-  var charsetLength = selectedCharset.length;
-  // Loop until selected password length is achieved  
-  for (let index = 0; index < pwdLengthSelected; index++) {
-    // pick a random character from selected charset and add to password
-    var positionRandom = Math.floor(Math.random() * charsetLength);
-    newPassword += selectedCharset.charAt(positionRandom);
+  var charTypeIndex = 0;
+  var charType;
+  // Loop until desired password length is achieved 
+  for (var index = 0; index < pwdLengthSelected; index++) {
+    // get char type from user selection
+    charType = pwdCharTypesSelected[charTypeIndex];
+    // fetch a random character of this type and add to the password 
+    newPassword += fetchRandomCharacter(passwordCharset[charType]);
+    // move to next char type, starting over when the list is complete
+    if (charTypeIndex < pwdCharTypesSelected.length - 1)
+      charTypeIndex++;
+    else
+      charTypeIndex = 0;
   }
   return newPassword;
 }
 
-// Construct the character set for password generation based on user's selection 
-// Returns - character set for password generation as string
-function getSelectedPasswordCharset() {
-  var selectedCharset = "";
-  for (var key in passwordCharset) {
-    if (pwdCharTypesSelected.indexOf(key) != -1) selectedCharset += passwordCharset[key];
-  };
-  return selectedCharset;
+// Picks a random character from the string provided 
+// Parameter - selectionString - string containing character set to select from
+// Returns - selected character 
+function fetchRandomCharacter(selectionString) {
+  var positionRandom = Math.floor(Math.random() * selectionString.length);
+  return selectionString.charAt(positionRandom);
 }
 
 // This function prompts user to input a value, validates and saves the selection
