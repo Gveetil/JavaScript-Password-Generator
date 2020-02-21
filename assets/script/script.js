@@ -21,32 +21,32 @@ var pwdCharTypesSelected = "luns";
 
 // Generate and display password in the password text area element
 function writePassword() {
-  var password = generatePassword();
-  // If the password was generated successfully, display it 
-  if (password != "") {
-    passwordTextEl.value = password;
+  // Set the password length 
+  if (getUserInput(promptPasswordLengthText, pwdLengthSelected, updatePasswordLength)) {
+    // Set the password char types
+    if (getUserInput(promptPasswordCharsText, pwdCharTypesSelected, updatePasswordChars)) {
+      // Generate and display password 
+      passwordTextEl.value = generatePassword();
+    }
   }
 }
 
-// Function to generate password based on user input
-// Returns - new password if successful, empty string if cancelled by user 
+// Generate and return password based on user's current selection
+// Returns - new password as string
 function generatePassword() {
-  // Set the password length - exit if not successful
-  if (getUserInput(promptPasswordLengthText, pwdLengthSelected, updatePasswordLength) == false) return "";
-  // Set the password char types - exit if not successful
-  if (getUserInput(promptPasswordCharsText, pwdCharTypesSelected, updatePasswordChars) == false) return "";
-  //Generate and return password
   var newPassword = "";
   var selectedCharset = getSelectedPasswordCharset();
   var charsetLength = selectedCharset.length;
+  // Loop until selected password length is achieved  
   for (let index = 0; index < pwdLengthSelected; index++) {
+    // pick a random character from selected charset and add to password
     var positionRandom = Math.floor(Math.random() * charsetLength);
     newPassword += selectedCharset.charAt(positionRandom);
   }
   return newPassword;
 }
 
-// This function constructs the character set used for password generation, based on user's current selection 
+// Construct the character set for password generation based on user's selection 
 // Returns - character set for password generation as string
 function getSelectedPasswordCharset() {
   var selectedCharset = "";
@@ -65,7 +65,7 @@ function getUserInput(promptText, promptValue, updateValueHandler) {
   var isSelected = false;
   var currentPromptText = promptText;
   var currentPromptValue = promptValue;
-  // This Loop prompts the user for input until a correct selection has been made
+  // Loop prompts the user for input until a correct selection has been made
   while (!isSelected) {
     var usrSelection = prompt(currentPromptText, currentPromptValue);
     if (usrSelection == undefined) {
@@ -73,7 +73,7 @@ function getUserInput(promptText, promptValue, updateValueHandler) {
       break;
     }
     else {
-      // Update the user selection 
+      // Update user selection 
       isSelected = updateValueHandler(usrSelection);
     }
     //For incorrect selection, update user prompt message accordingly
@@ -85,7 +85,7 @@ function getUserInput(promptText, promptValue, updateValueHandler) {
   return isSelected;
 }
 
-// Validates and saves the length entered by the user 
+// Validate and save the length entered by the user 
 // Parameter - usrSelection - the length entered by the user as string
 // Returns - true if successful, false if the length is incorrect 
 function updatePasswordLength(usrSelection) {
@@ -98,7 +98,7 @@ function updatePasswordLength(usrSelection) {
   return false;
 }
 
-// Validates and saves the char types selected by the user 
+// Validate and save the char types selected by the user 
 // Parameter - usrSelection - the char types selected by the user as string
 // Returns - true if successful, false if the selection is incorrect 
 function updatePasswordChars(usrSelection) {
@@ -116,7 +116,7 @@ function updatePasswordChars(usrSelection) {
       break;
     }
   }
-  // Check if Char types selected correctly and set the password char types selection 
+  // Check if at least one Char type is selected and set the password char types  
   if (usrCharTypes.length > 0) {
     pwdCharTypesSelected = usrCharTypes;
     return true;
