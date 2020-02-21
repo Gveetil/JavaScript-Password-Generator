@@ -1,3 +1,5 @@
+/* Styling for Password Generator Form */
+
 *,
 *::before,
 *::after {
@@ -72,6 +74,7 @@ header {
   clear: both;
 }
 
+/* Styling for generate password button */
 .btn {
   border: none;
   background-color: hsl(360, 91%, 36%);
@@ -97,6 +100,7 @@ button[disabled] {
   float: right;
 }
 
+/* Styling for the password display box */
 #password {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -118,6 +122,7 @@ button[disabled] {
   overflow: hidden;
 }
 
+/* button and password box font sizes scale down for medium viewports */
 @media (max-width: 690px) {
   .btn {
     font-size: 1rem;
@@ -129,7 +134,8 @@ button[disabled] {
     font-size: 1rem;
   }
 }
-
+ 
+/* button font size reduces even more for smaller viewports */
 @media (max-width: 500px) {
   .btn {
     font-size: 0.8rem;
